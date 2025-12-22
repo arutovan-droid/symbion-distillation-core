@@ -588,6 +588,21 @@ What is **not** here yet ❌
 Resonance Fabric can evolve or be replaced,  
 but **without a Distillation Core there is no Symbion.**
 
+---
+
+## Part of Symbion Space
+
+This repository is one module of **Symbion Space** – a structural OS for thinking.
+
+Core related modules:
+
+- `symbion-latp` – dialog trajectories & phases (when to heat, shift, cool down, airlock).
+- `symbion-distillation-core` – distillation still (convert any raw text into structural Essence or burn it).
+- `symbion-resonance-fabric` – resonance scoring (R, Librarium / TVP gating).
+- `symbion-librarium-core` – structural memory plane (digital khachkar fabric).
+
+For a high-level overview of how these fit together,  
+see the Symbion Space overview in the Distillation Core docs (OVERVIEW.md).
 
 
 Symbion does not store texts.
