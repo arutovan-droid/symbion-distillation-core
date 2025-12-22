@@ -527,6 +527,66 @@ Avarayr,
 
 
 toxic political post.
+## 8. Why this repo matters (vs. Resonance Fabric)
+
+`symbion-distillation-core` is **more fundamental** than the Resonance Fabric.
+
+- Resonance Fabric answers:  
+  > “Given an episode, how strongly does it align with the Symbion canon (R)?”
+
+- Distillation Core answers:  
+  > “Given *any* raw text, is there a structure worth keeping at all?”
+
+If the Distillation Core works well:
+
+- we can safely feed it **any corpus** (including trash, propaganda, AI-noise),
+- only **structures** survive and enter the Librarium,
+- everything else (rhetoric, emotion, ideology, padding) is burned,
+- model collapse is mitigated at the **knowledge level**, not at the training level.
+
+In other words:
+
+> Resonance Fabric = *how good is this episode inside the canon?*  
+> Distillation Core = *is there any canon-worthy structure here at all?*
+
+
+## 9. Current status
+
+At this stage this is **not** a working production module – it is a **conceptual core** with a minimal code scaffold.
+
+What is here ✅
+
+- A clear paradigm:
+  - input = any text (even “garbage”),
+  - process = structural extraction + rhetoric burn-off,
+  - output = pure idea architectures (ESSENCE).
+- Concrete examples of how it should behave:
+  - *borscht* request → culinary contract, not just a recipe,
+  - *term paper on qubits* → mentor mode, not ghostwriting,
+  - *2+2* → lesson about axiom systems, not just “4”,
+  - history (Avarayr, etc.) → structural patterns, not trivia.
+- A basic pipeline skeleton:
+  - `RawInput` → `Essence`,
+  - stub `distill_to_structure` function,
+  - docs that pin the paradigm.
+
+What is **not** here yet ❌
+
+- Real distillation pipeline:
+  - no structural extractor,
+  - no real rhetoric/slag filter,
+  - no graph/PSL normalization,
+- No tight integration with:
+  - Librarium,
+  - Resonance Fabric,
+  - PSL / LATP / GeoBench / TRM,
+- No tests, no CI,
+- No production-ready performance / monitoring.
+
+**Conclusion:** this repo is the **paradigm heart** of Symbion  
+(a “digital khachkar” still, not a finished engine).  
+Resonance Fabric can evolve or be replaced,  
+but **without a Distillation Core there is no Symbion.**
 
 
 
