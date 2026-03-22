@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import asdict, dataclass, field
 from typing import Any, Dict, List
 
 
@@ -57,6 +57,17 @@ class OperatorEssenceDelta:
     dominant_crystal_principle: Dict[str, Any] = field(default_factory=dict)
     dominant_open_thread: Dict[str, Any] = field(default_factory=dict)
 
+    def to_snapshot_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_snapshot_dict(cls, data: Dict[str, Any]) -> "OperatorEssenceDelta":
+        return cls(
+            dominant_state_shift=dict(data.get("dominant_state_shift", {})),
+            dominant_crystal_principle=dict(data.get("dominant_crystal_principle", {})),
+            dominant_open_thread=dict(data.get("dominant_open_thread", {})),
+        )
+
 
 @dataclass
 class DistillationDecision:
@@ -67,3 +78,36 @@ class DistillationDecision:
     operator_essence_delta: OperatorEssenceDelta = field(default_factory=OperatorEssenceDelta)
     rationale: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def to_snapshot_dict(self) -> Dict[str, Any]:
+        return {
+            "crystal_candidates": [asdict(x) for x in self.crystal_candidates],
+            "state_vector_shifts": [asdict(x) for x in self.state_vector_shifts],
+            "open_threads": [asdict(x) for x in self.open_threads],
+            "burned_residue": [asdict(x) for x in self.burned_residue],
+            "operator_essence_delta": self.operator_essence_delta.to_snapshot_dict(),
+            "rationale": list(self.rationale),
+            "metadata": dict(self.metadata),
+        }
+
+    @classmethod
+    def from_snapshot_dict(cls, data: Dict[str, Any]) -> "DistillationDecision":
+        return cls(
+            crystal_candidates=[
+                CrystalCandidate(**item) for item in data.get("crystal_candidates", [])
+            ],
+            state_vector_shifts=[
+                StateVectorShift(**item) for item in data.get("state_vector_shifts", [])
+            ],
+            open_threads=[
+                OpenThread(**item) for item in data.get("open_threads", [])
+            ],
+            burned_residue=[
+                BurnedResidue(**item) for item in data.get("burned_residue", [])
+            ],
+            operator_essence_delta=OperatorEssenceDelta.from_snapshot_dict(
+                data.get("operator_essence_delta", {})
+            ),
+            rationale=list(data.get("rationale", [])),
+            metadata=dict(data.get("metadata", {})),
+        )

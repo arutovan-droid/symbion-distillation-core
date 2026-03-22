@@ -1,4 +1,5 @@
 from symbion_distillation import DistillationInput, DistillationPacket, distill_packets
+from symbion_distillation.types import DistillationDecision
 
 
 def test_distillation_smoke():
@@ -44,3 +45,12 @@ def test_distillation_smoke():
     assert decision.operator_essence_delta.dominant_crystal_principle["packet_id"] == "p1"
     assert decision.operator_essence_delta.dominant_state_shift["packet_id"] == "p1"
     assert decision.operator_essence_delta.dominant_open_thread["packet_id"] == "p1"
+
+    snapshot = decision.to_snapshot_dict()
+    restored = DistillationDecision.from_snapshot_dict(snapshot)
+
+    assert restored.metadata["packets_total"] == 3
+    assert restored.operator_essence_delta.dominant_crystal_principle["packet_id"] == "p1"
+    assert restored.operator_essence_delta.dominant_state_shift["packet_id"] == "p1"
+    assert restored.operator_essence_delta.dominant_open_thread["packet_id"] == "p1"
+    assert [x.packet_id for x in restored.crystal_candidates] == crystal_ids
