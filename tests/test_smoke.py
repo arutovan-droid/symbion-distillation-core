@@ -34,3 +34,9 @@ def test_distillation_smoke():
     assert "p1" in thread_ids
     assert "p2" in thread_ids
     assert "p3" in residue_ids
+
+    assert decision.metadata["packets_total"] == 3
+    assert "p1" in decision.metadata["packets_with_crystal"]
+    assert "p1" in decision.metadata["packets_with_shift"]
+    assert "p1" in decision.metadata["packets_with_open_thread"]
+    assert "p3" in decision.metadata["fully_burned_packets"]

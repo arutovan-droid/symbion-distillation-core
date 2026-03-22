@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from .types import (
     BurnedResidue,
@@ -44,29 +44,30 @@ def _extract_open_thread(packet: DistillationPacket) -> Dict[str, Any] | None:
     resonance = packet.resonance_candidate or {}
 
     if continuity.get("open_thread") or continuity.get("unresolved"):
-        return {
-            "continuity_event": continuity,
-        }
+        return {"continuity_event": continuity}
 
     if resonance.get("status") in {"open", "unresolved", "pending"}:
-        return {
-            "resonance_candidate": resonance,
-        }
+        return {"resonance_candidate": resonance}
 
     return None
 
 
 def distill_packets(inp: DistillationInput) -> DistillationDecision:
     decision = DistillationDecision()
-    decision.metadata = {
-        "operator_id": inp.operator_id,
-        "session_id": inp.session_id,
-        "packets_total": len(inp.packets),
-    }
+    packets_with_crystal = []
+    packets_with_shift = []
+    packets_with_open_thread = []
+    fully_burned_packets = []
 
     for packet in inp.packets:
+        packet_has_crystal = False
+        packet_has_shift = False
+        packet_has_thread = False
+
         principle = _extract_principle(packet)
         if principle:
+            packet_has_crystal = True
+            packets_with_crystal.append(packet.packet_id)
             decision.crystal_candidates.append(
                 CrystalCandidate(
                     packet_id=packet.packet_id,
@@ -88,6 +89,8 @@ def distill_packets(inp: DistillationInput) -> DistillationDecision:
 
         shift_payload = _extract_state_shift(packet)
         if shift_payload:
+            packet_has_shift = True
+            packets_with_shift.append(packet.packet_id)
             decision.state_vector_shifts.append(
                 StateVectorShift(
                     packet_id=packet.packet_id,
@@ -98,6 +101,8 @@ def distill_packets(inp: DistillationInput) -> DistillationDecision:
 
         thread_payload = _extract_open_thread(packet)
         if thread_payload:
+            packet_has_thread = True
+            packets_with_open_thread.append(packet.packet_id)
             decision.open_threads.append(
                 OpenThread(
                     packet_id=packet.packet_id,
@@ -106,7 +111,8 @@ def distill_packets(inp: DistillationInput) -> DistillationDecision:
                 )
             )
 
-        if not shift_payload and not thread_payload and not principle:
+        if not packet_has_crystal and not packet_has_shift and not packet_has_thread:
+            fully_burned_packets.append(packet.packet_id)
             decision.burned_residue.append(
                 BurnedResidue(
                     packet_id=packet.packet_id,
@@ -115,6 +121,15 @@ def distill_packets(inp: DistillationInput) -> DistillationDecision:
                 )
             )
 
+    decision.metadata = {
+        "operator_id": inp.operator_id,
+        "session_id": inp.session_id,
+        "packets_total": len(inp.packets),
+        "packets_with_crystal": packets_with_crystal,
+        "packets_with_shift": packets_with_shift,
+        "packets_with_open_thread": packets_with_open_thread,
+        "fully_burned_packets": fully_burned_packets,
+    }
     decision.rationale.append("distillation_extracts_only_structural_outputs")
     decision.rationale.append("non_structural_material_is_burned_not_stored")
     return decision
