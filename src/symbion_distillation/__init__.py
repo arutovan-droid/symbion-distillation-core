@@ -1,4 +1,21 @@
-from .types import RawInput, Essence
-from .pipeline import distill_to_structure
+from .pipeline import distill_packets
+from .types import (
+    BurnedResidue,
+    CrystalCandidate,
+    DistillationDecision,
+    DistillationInput,
+    DistillationPacket,
+    OpenThread,
+    StateVectorShift,
+)
 
-__all__ = ["RawInput", "Essence", "distill_to_structure"]
+__all__ = [
+    "BurnedResidue",
+    "CrystalCandidate",
+    "DistillationDecision",
+    "DistillationInput",
+    "DistillationPacket",
+    "OpenThread",
+    "StateVectorShift",
+    "distill_packets",
+]
