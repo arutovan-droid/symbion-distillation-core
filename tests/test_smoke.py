@@ -40,3 +40,7 @@ def test_distillation_smoke():
     assert "p1" in decision.metadata["packets_with_shift"]
     assert "p1" in decision.metadata["packets_with_open_thread"]
     assert "p3" in decision.metadata["fully_burned_packets"]
+
+    assert decision.operator_essence_delta.dominant_crystal_principle["packet_id"] == "p1"
+    assert decision.operator_essence_delta.dominant_state_shift["packet_id"] == "p1"
+    assert decision.operator_essence_delta.dominant_open_thread["packet_id"] == "p1"

@@ -52,10 +52,18 @@ class BurnedResidue:
 
 
 @dataclass
+class OperatorEssenceDelta:
+    dominant_state_shift: Dict[str, Any] = field(default_factory=dict)
+    dominant_crystal_principle: Dict[str, Any] = field(default_factory=dict)
+    dominant_open_thread: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
 class DistillationDecision:
     crystal_candidates: List[CrystalCandidate] = field(default_factory=list)
     state_vector_shifts: List[StateVectorShift] = field(default_factory=list)
     open_threads: List[OpenThread] = field(default_factory=list)
     burned_residue: List[BurnedResidue] = field(default_factory=list)
+    operator_essence_delta: OperatorEssenceDelta = field(default_factory=OperatorEssenceDelta)
     rationale: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)

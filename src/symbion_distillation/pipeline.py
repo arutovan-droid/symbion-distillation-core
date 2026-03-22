@@ -9,6 +9,7 @@ from .types import (
     DistillationInput,
     DistillationPacket,
     OpenThread,
+    OperatorEssenceDelta,
     StateVectorShift,
 )
 
@@ -130,6 +131,30 @@ def distill_packets(inp: DistillationInput) -> DistillationDecision:
         "packets_with_open_thread": packets_with_open_thread,
         "fully_burned_packets": fully_burned_packets,
     }
+
+    dominant_shift = decision.state_vector_shifts[0] if decision.state_vector_shifts else None
+    dominant_crystal = decision.crystal_candidates[0] if decision.crystal_candidates else None
+    dominant_thread = decision.open_threads[0] if decision.open_threads else None
+
+    decision.operator_essence_delta = OperatorEssenceDelta(
+        dominant_state_shift={
+            "packet_id": dominant_shift.packet_id,
+            "shift_type": dominant_shift.shift_type,
+            "payload": dominant_shift.payload,
+        } if dominant_shift else {},
+        dominant_crystal_principle={
+            "packet_id": dominant_crystal.packet_id,
+            "principle": dominant_crystal.principle,
+            "support": dominant_crystal.support,
+        } if dominant_crystal else {},
+        dominant_open_thread={
+            "packet_id": dominant_thread.packet_id,
+            "thread_type": dominant_thread.thread_type,
+            "payload": dominant_thread.payload,
+        } if dominant_thread else {},
+    )
+
     decision.rationale.append("distillation_extracts_only_structural_outputs")
+    decision.rationale.append("operator_essence_delta_is_minimal_not_total_memory")
     decision.rationale.append("non_structural_material_is_burned_not_stored")
     return decision
